@@ -1,0 +1,52 @@
+<?php
+/**
+ * @file
+ * Code for the Gov Analytics Dashboard.
+ */
+
+include_once 'gov_analytics_dashboard.theme.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function gov_analytics_dashboard_menu() {
+  $items['analytics'] = array(
+    'title' => 'Web Analytics',
+    'title callback' => 'gov_analytics_dashboard_page_title',
+    'page callback' => 'gov_analytics_dashboard_web_analytics',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback.
+ */
+function gov_analytics_dashboard_web_analytics() {
+  // Add javascript libraries.
+  drupal_add_js(libraries_get_path('analytics.usa.gov-18f-pages') . '/js/vendor/q.min.js', array('every_page' => FALSE));
+  drupal_add_js(libraries_get_path('analytics.usa.gov-18f-pages') . '/js/vendor/d3.v3.min.js', array('every_page' => FALSE));
+
+  // Add main js to footer.
+  drupal_add_js(libraries_get_path('analytics.usa.gov-18f-pages') . '/js/index.js', array('every_page' => FALSE, 'scope' => 'footer'));
+
+  // Add css.
+  drupal_add_css(libraries_get_path('analytics.usa.gov-18f-pages') . '/css/google-fonts.css', array('every_page' => FALSE));
+  drupal_add_css(drupal_get_path('module', 'gov_analytics_dashboard') . '/css/public_analytics.css', array('every_page' => FALSE));
+
+  return theme('web_analytics');
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function gov_analytics_dashboard_preprocess_page(&$vars) {
+  $vars['is_default_theme'] = path_to_theme() == drupal_get_path('theme', variable_get('theme_default', NULL));
+
+  // Only process pages for the default theme.
+  if (!$vars['is_default_theme']) {
+    return;
+  }
+}
+

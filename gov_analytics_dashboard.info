@@ -1,0 +1,5 @@
+name = Gov Analytics Dashboard
+description = Implements the dashboard piece of the government analytics tool by 18F.
+core = 7.x
+package = Contrib
+version = 7.x-1.0
